@@ -1,0 +1,19 @@
+
+
+<div class="flex-container">
+  <.form
+      let={f}
+      for={:microwave}
+      class="flex-child"
+      id="microwave-form"
+      action="#"
+      phx_submit={:submit_time}
+    >
+      <%= text_input f, :time, value: @time, placeholder: "Enter time", readonly: true%>
+      <%= submit "Submit time" %>
+    </.form>
+    <div class="flex-child">
+      <button phx-click="increment_time"><strong>+</strong></button>
+      <button phx-click="decrement_time"><strong>-</strong></button>
+    </div>
+</div>
