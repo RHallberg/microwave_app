@@ -44,6 +44,7 @@ select {
   width: 150px;
   height: 100px;
   background-color: #606c76;
+  margin-right: 2rem;
 }
 
 .status {

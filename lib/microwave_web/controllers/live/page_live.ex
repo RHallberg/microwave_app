@@ -5,14 +5,14 @@ defmodule MicrowaveWeb.PageLive do
   @impl true
   def mount(_params, _session, socket) do
 
+    ids = ["one", "two", "three", "four", "five", "six"]
 
-    microwaves = [
-      %{
-      id: "foo",
-      pid: Microwave.MicrowaveTimer.start_link(%{topic: "st4", id: "foo"}) |> elem(1),
+    microwaves = Enum.map(ids, fn id -> %{
+      id: id,
+      pid: Microwave.MicrowaveTimer.start_link(%{topic: "st4", id: id}) |> elem(1),
       state: :available
-      }
-    ]
+      } end)
+
     if connected?(socket) do
       MicrowaveWeb.Endpoint.subscribe("st4")
     end
