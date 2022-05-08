@@ -40,6 +40,18 @@ select {
   flex: 1;
 }
 
+.microwave {
+  width: 150px;
+  height: 100px;
+  background-color: #606c76;
+}
+
+.status {
+  color: #fff;
+  text-align: center;
+  padding-top: 30px;
+}
+
 
 /* Phoenix promo and logo */
 .phx-hero {

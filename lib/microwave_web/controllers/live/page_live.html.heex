@@ -17,3 +17,8 @@
       <button phx-click="decrement_time"><strong>-</strong></button>
     </div>
 </div>
+<div class="flex-container">
+  <div class="microwave" id="foo" phx-update="replace">
+    <p class="status"><%= @microwaves["foo"].state %></p>
+  </div>
+</div>
