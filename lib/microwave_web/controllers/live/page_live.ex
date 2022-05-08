@@ -5,11 +5,14 @@ defmodule MicrowaveWeb.PageLive do
   @impl true
   def mount(_params, _session, socket) do
 
-    microwave_id = "foo"
-    microwaves = %{microwave_id => %{
-      pid: Microwave.MicrowaveTimer.start_link(%{topic: "st4", id: microwave_id}) |> elem(1),
+
+    microwaves = [
+      %{
+      id: "foo",
+      pid: Microwave.MicrowaveTimer.start_link(%{topic: "st4", id: "foo"}) |> elem(1),
       state: :available
-    }}
+      }
+    ]
     if connected?(socket) do
       MicrowaveWeb.Endpoint.subscribe("st4")
     end
@@ -35,13 +38,14 @@ defmodule MicrowaveWeb.PageLive do
 
   @impl true
   def handle_event("submit_time", %{"microwave" => %{"time" => time}}, socket = %{assigns: %{microwaves: microwaves}}) do
-    available = find_available(microwaves)
-    start_if_available(socket, Integer.parse(time) |> elem(0), find_available(microwaves))
+    available = Enum.find(microwaves, fn m -> m.state == :available end)
+    start_if_available(socket, Integer.parse(time) |> elem(0), available)
   end
 
   @impl true
   def handle_info(%{event: "microwave_done", payload: id}, socket = %{assigns: %{microwaves: microwaves}} ) do
-    {:noreply, assign(socket, microwaves: %{microwaves | id => %{microwaves[id] | state: :available} })}
+    {microwave, i} = Enum.with_index(microwaves) |> Enum.find(fn {m, _i} -> m.id == id  end)
+    {:noreply, assign(socket, microwaves: List.replace_at(microwaves, i, %{microwave | state: :available}))}
   end
 
   defp start_if_available(socket, _time, nil) do
@@ -49,17 +53,10 @@ defmodule MicrowaveWeb.PageLive do
     {:noreply, socket}
   end
 
-  defp start_if_available(socket = %{assigns: %{microwaves: microwaves}}, time, id) do
-    Microwave.MicrowaveTimer.start_timer(microwaves[id].pid, time)
-    {:noreply, assign(socket, microwaves: %{microwaves | id => %{microwaves[id] | state: :busy} })}
+  defp start_if_available(socket = %{assigns: %{microwaves: microwaves}}, time, available) do
+    Microwave.MicrowaveTimer.start_timer(available.pid, time)
+    {microwave, i} = Enum.with_index(microwaves) |> Enum.find(fn {m, _i} -> m.id == available.id  end)
+    {:noreply, assign(socket, microwaves: List.replace_at(microwaves, i, %{microwave | state: :busy}))}
   end
 
-
-  defp find_available(microwaves) do
-    available = Enum.find(microwaves, fn m -> m
-      |> elem(1)
-      |> Map.fetch(:state)
-      |> elem(1) == :available end)
-    unless is_nil(available), do: (available |> elem(0)), else: available
-  end
 end

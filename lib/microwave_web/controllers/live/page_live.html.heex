@@ -19,6 +19,6 @@
 </div>
 <div class="flex-container">
   <div class="microwave" id="foo" phx-update="replace">
-    <p class="status"><%= @microwaves["foo"].state %></p>
+    <p class="status"><%= List.first(@microwaves).state %></p>
   </div>
 </div>
