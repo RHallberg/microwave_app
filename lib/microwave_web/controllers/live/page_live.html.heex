@@ -1,5 +1,7 @@
 
 
+<h1>Microwave timer app</h1>
+
 <div class="flex-container">
   <.form
       let={f}
@@ -9,7 +11,7 @@
       action="#"
       phx_submit={:submit_time}
     >
-      <%= text_input f, :time, value: @time, placeholder: "Enter time", readonly: true%>
+      <%= text_input f, :time, value: @time, placeholder: "Enter time"%>
       <%= submit "Submit time" %>
     </.form>
     <div class="flex-child">
@@ -19,7 +21,7 @@
 </div>
 <div class="flex-container">
   <%= for microwave <- @microwaves do %>
-    <div class="microwave" id={microwave.id} phx-update="replace">
+    <div class={"microwave #{microwave.state}"} id={microwave.id} phx-update="replace">
       <p class="status"><%= microwave.state %></p>
     </div>
   <% end %>

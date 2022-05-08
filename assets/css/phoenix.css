@@ -47,6 +47,14 @@ select {
   margin-right: 2rem;
 }
 
+.available {
+  background-color: #14c723;
+}
+
+.busy {
+  background-color: #c73016;
+}
+
 .status {
   color: #fff;
   text-align: center;
