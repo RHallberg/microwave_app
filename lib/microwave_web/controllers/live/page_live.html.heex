@@ -23,6 +23,7 @@
   <%= for microwave <- @microwaves do %>
     <div class={"microwave #{microwave.state}"} id={microwave.id} phx-update="replace">
       <p class="status"><%= microwave.state %></p>
+      <p><%= microwave.time %></p>
     </div>
   <% end %>
 </div>

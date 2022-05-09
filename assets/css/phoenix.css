@@ -47,6 +47,11 @@ select {
   margin-right: 2rem;
 }
 
+.microwave p {
+  text-align: center;
+  color: #fff;
+}
+
 .available {
   background-color: #14c723;
 }
@@ -56,9 +61,7 @@ select {
 }
 
 .status {
-  color: #fff;
-  text-align: center;
-  padding-top: 30px;
+  padding-top: 15px;
 }
 
 

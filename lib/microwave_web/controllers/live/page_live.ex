@@ -10,7 +10,8 @@ defmodule MicrowaveWeb.PageLive do
     microwaves = Enum.map(ids, fn id -> %{
       id: id,
       pid: Microwave.MicrowaveTimer.start_link(%{topic: "st4", id: id}) |> elem(1),
-      state: :available
+      state: :available,
+      time: 0
       } end)
 
     if connected?(socket) do
@@ -43,9 +44,15 @@ defmodule MicrowaveWeb.PageLive do
   end
 
   @impl true
+  def handle_info(%{event: "microwave_tick", payload: %{id: id, current: current}}, socket = %{assigns: %{microwaves: microwaves}} ) do
+    {microwave, i} = Enum.with_index(microwaves) |> Enum.find(fn {m, _i} -> m.id == id  end)
+    {:noreply, assign(socket, microwaves: List.replace_at(microwaves, i, %{microwave | time: current}))}
+  end
+
+  @impl true
   def handle_info(%{event: "microwave_done", payload: id}, socket = %{assigns: %{microwaves: microwaves}} ) do
     {microwave, i} = Enum.with_index(microwaves) |> Enum.find(fn {m, _i} -> m.id == id  end)
-    {:noreply, assign(socket, microwaves: List.replace_at(microwaves, i, %{microwave | state: :available}))}
+    {:noreply, assign(socket, microwaves: List.replace_at(microwaves, i, %{microwave | state: :available, time: 0}))}
   end
 
   defp start_if_available(socket, _time, nil) do
@@ -56,7 +63,7 @@ defmodule MicrowaveWeb.PageLive do
   defp start_if_available(socket = %{assigns: %{microwaves: microwaves}}, time, available) do
     Microwave.MicrowaveTimer.start_timer(available.pid, time)
     {microwave, i} = Enum.with_index(microwaves) |> Enum.find(fn {m, _i} -> m.id == available.id  end)
-    {:noreply, assign(socket, microwaves: List.replace_at(microwaves, i, %{microwave | state: :busy}))}
+    {:noreply, assign(socket, microwaves: List.replace_at(microwaves, i, %{microwave | state: :busy, time: time}))}
   end
 
 end

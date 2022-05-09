@@ -38,6 +38,7 @@ defmodule Microwave.MicrowaveTimer do
   def handle_info({:timeout, _timer_ref, :tick}, st) when st.current > 0 do
     new_timer = :erlang.start_timer(@interval, self(), :tick)
     :erlang.cancel_timer(st.timer)
+    MicrowaveWeb.Endpoint.broadcast(st.topic, "microwave_tick", %{id: st.id, current: st.current})
 
     {:noreply, %{st | current: st.current - 1, timer: new_timer}}
   end
