@@ -14,7 +14,7 @@
       >
         <%= hidden_input f, :time, value: @time, placeholder: "Enter time"%>
         <div class="time">
-          <h2><%= @time %></h2>
+          <h2><%= time_formatted(@time)%></h2>
         </div>
         <%= submit "Submit time" %>
       </.form>
@@ -26,7 +26,7 @@
   <%= for microwave <- @microwaves do %>
     <div class={"microwave #{microwave.state}"} id={microwave.id} phx-update="replace">
       <p class="status"><%= microwave.state %></p>
-      <p><%= microwave.time %></p>
+      <p><%= time_formatted(microwave.time) %></p>
     </div>
   <% end %>
 </div>

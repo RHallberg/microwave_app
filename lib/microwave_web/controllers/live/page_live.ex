@@ -55,6 +55,12 @@ defmodule MicrowaveWeb.PageLive do
     {:noreply, assign(socket, microwaves: List.replace_at(microwaves, i, %{microwave | state: :available, time: 0}))}
   end
 
+  def time_formatted(time) do
+    seconds = rem(time, 60) |> Integer.to_string |> String.pad_leading(2, "0")
+    minutes = trunc(time/60) |> Integer.to_string  |> String.pad_leading(2, "0")
+    "#{minutes}:#{seconds}"
+  end
+
   defp start_if_available(socket, _time, nil) do
     Logger.info("No microwave available!")
     {:noreply, socket}
