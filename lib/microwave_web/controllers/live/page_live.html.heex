@@ -3,20 +3,23 @@
 <h1>Microwave timer app</h1>
 
 <div class="flex-container">
-  <.form
-      let={f}
-      for={:microwave}
-      class="flex-child"
-      id="microwave-form"
-      action="#"
-      phx_submit={:submit_time}
-    >
-      <%= text_input f, :time, value: @time, placeholder: "Enter time"%>
-      <%= submit "Submit time" %>
-    </.form>
-    <div class="flex-child">
-      <button phx-click="increment_time"><strong>+</strong></button>
-      <button phx-click="decrement_time"><strong>-</strong></button>
+  <div class="flex-child">
+    <.form
+        let={f}
+        for={:microwave}
+        id="microwave-form"
+        class="flex-child"
+        action="#"
+        phx_submit={:submit_time}
+      >
+        <%= hidden_input f, :time, value: @time, placeholder: "Enter time"%>
+        <div class="time">
+          <h2><%= @time %></h2>
+        </div>
+        <%= submit "Submit time" %>
+      </.form>
+      <button phx-click="increment_time"><strong>+10</strong></button>
+      <button phx-click="decrement_time"><strong>-10</strong></button>
     </div>
 </div>
 <div class="flex-container">

@@ -28,12 +28,12 @@ defmodule MicrowaveWeb.PageLive do
 
   @impl true
   def handle_event("increment_time", _params, socket) do
-    {:noreply, assign(socket, time: socket.assigns.time + 1)}
+    {:noreply, assign(socket, time: socket.assigns.time + 10)}
   end
 
   @impl true
   def handle_event("decrement_time", _params, socket = %{assigns: %{time: time}}) do
-    new_time = unless time == 0, do: time - 1, else: 0
+    new_time = unless time <= 0, do: time - 10, else: 0
     {:noreply, assign(socket, time: new_time)}
   end
 
